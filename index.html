@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Academy - Cursos Gratuitos do Mundo Todo</title>
+    <style>
+        /* CONFIGURAÇÕES DE INTERFACE DARK NEON */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', system-ui, sans-serif; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); 
+        }
+        
+        body { 
+            background-color: #080c14; 
+            color: #e2e8f0; 
+            min-height: 100vh; 
+        }
+        
+        header { 
+            background: rgba(17, 24, 39, 0.8); 
+            backdrop-filter: blur(12px); 
+            border-bottom: 1px solid #1e293b; 
+            padding: 20px 40px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            position: sticky; 
+            top: 0; 
+            z-index: 50; 
+        }
+        
+        .logo { 
+            font-size: 22px; 
+            font-weight: 800; 
+            background: linear-gradient(135deg, #38bdf8, #818cf8); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        
+        /* ABAS E FILTROS DINÂMICOS */
+        .tabs { 
+            display: flex; 
+            gap: 15px; 
+            justify-content: center; 
+            margin: 40px 0 20px 0; 
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn { 
+            background: #111827; 
+            border: 1px solid #334155; 
+            color: #94a3b8; 
+            padding: 12px 24px; 
+            border-radius: 30px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            font-size: 14px; 
+        }
+        
+        .tab-btn.active, .tab-btn:hover { 
+            background: linear-gradient(135deg, #0284c7, #4f46e5); 
+            color: #fff; 
+            border-color: transparent; 
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.3); 
+            transform: translateY(-2px); 
+        }
+
+        .container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px 60px 20px; 
+        }
+        
+        /* GRID DE PRODUTOS/CURSOS */
+        .courses-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); 
+            gap: 30px; 
+        }
+        
+        .course-category {
+            display: none;
+        }
+
+        .course-category.active {
+            display: contents;
+        }
+
+        /* ESTRUTURA DOS CARDS PROFISSIONAIS */
+        .course-card { 
+            background: #111827; 
+            border: 1px solid #1e293b; 
+            border-radius: 16px; 
+            padding: 25px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+            position: relative; 
+            overflow: hidden; 
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .course-card:hover { 
+            border-color: #38bdf8; 
+            transform: translateY(-6px); 
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5); 
+        }
+        
+        .course-card::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 4px; 
+            height: 100%; 
+            background: linear-gradient(to bottom, #38bdf8, #4f46e5); 
+        }
+        
+        .platform { 
+            font-size: 12px; 
+            font-weight: 700; 
+            color: #38bdf8; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+            margin-bottom: 8px; 
+        }
+        
+        .title { 
+            font-size: 18px; 
+            font-weight: 700; 
+            margin-bottom: 12px; 
+            color: #fff; 
+            line-height: 1.4; 
+        }
+        
+        .desc { 
+            font-size: 14px; 
+            color: #94a3b8; 
+            margin-bottom: 20px; 
+            line-height: 1.6; 
+            flex-grow: 1; 
+        }
+        
+        /* SEÇÃO DE METADADOS DOS CURSOS */
+        .meta-group { 
+            background: #0f172a; 
+            border-radius: 10px; 
+            padding: 15px; 
+            margin-bottom: 20px; 
+            font-size: 13px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px; 
+        }
+        
+        .meta-item { 
+            display: flex; 
+            justify-content: space-between; 
+        }
+        
+        .meta-label { 
+            color: #64748b; 
+        }
+        
+        .meta-val { 
+            color: #cbd5e1; 
+            font-weight: 500; 
+        }
+
+        .access-btn { 
+            display: inline-block; 
+            text-align: center; 
+            background: #1e293b; 
+            border: 1px solid #334155; 
+            color: #fff; 
+            padding: 14px; 
+            border-radius: 10px; 
+            text-decoration: none; 
+            font-weight: 600; 
+            font-size: 14px; 
+            transition: all 0.3s ease;
+        }
+        
+        .access-btn:hover { 
+            background: #0284c7; 
+            border-color: transparent; 
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.4); 
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">GLOBAL ACADEMY</div>
+        <div style="color: #64748b; font-size: 14px;">Curadoria Sênior de Educação</div>
+    </header>
+
+    <main class="container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="mostrarCategoria('tecnologia', this)">💻 Tecnologia</button>
+            <button class="tab-btn" onclick="mostrarCategoria('negocios', this)">📊 Negócios</button>
+            <button class="tab-btn" onclick="mostrarCategoria('design', this)">🎨 Design</button>
+        </div>
+
+        <div id="grid-cursos" class="courses-grid">
+            <!-- TECNOLOGIA -->
+            <div class="course-category active" data-category="tecnologia">
+                <div class="course-card">
+                    <div>
+                        <div class="platform">HARVARD UNIVERSITY (EDX)</div>
+                        <div class="title">CS50: Introduction to Computer Science</div>
+                        <div class="desc">O maior e mais famoso curso de fundamentos de programação, algoritmos, C, Python e SQL do mundo.</div>
+                    </div>
+                    <div>
+                        <div class="meta-group">
+                            <div class="meta-item">
+                                <span class="meta-label">⏱️ Duração:</span>
+                                <span class="meta-val">12 semanas (6-18h/sem)</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">🌐 Idioma:</span>
+                                <span class="meta-val">Inglês (Legendas PT-BR)</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">📜 Certificado:</span>
+                                <span class="meta-val" style="color: #10b981;">Gratuito / Pago (Opcional)</span>
+                            </div>
+                        </div>
+                        <a href="https://edx.org" target="_blank" class="access-btn">Acessar Curso Gratuito ↗</a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div>
+                        <div class="platform">UNIVERSITY OF MICHIGAN (COURSERA)</div>
+                        <div class="title">Python for Everybody Specialization</div>
+                        <div class="desc">Do absoluto zero às estruturas de dados e tratamento de arquivos web utilizando a linguagem Python.</div>
+                    </div>
+                    <div>
+                        <div class="meta-group">
+                            <div class="meta-item">
+                                <span class="meta-label">⏱️ Duração:</span>
+                                <span class="meta-val">Aproximadamente 2 meses</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">🌐 Idioma:</span>
+                                <span class="meta-val">Inglês (Legendas PT-BR)</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">📜 Certificado:</span>
+                                <span class="meta-val" style="color: #10b981;">Grátis via Auxílio Financeiro</span>
+                            </div>
+                        </div>
+                        <a href="https://coursera.org" target="_blank" class="access-btn">Acessar Curso Gratuito ↗</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NEGÓCIOS -->
+            <div class="course-category" data-category="negocios">
+                <div class="course-card">
+                    <div>
+                        <div class="platform">GOOGLE CAREER CERTIFICATES</div>
+                        <div class="title">Google Digital Marketing & E-commerce</div>
+                        <div class="desc">Aprenda SEO, anúncios digitais, e-mail marketing e métricas avançadas com os especialistas do Google.</div>
+                    </div>
+                    <div>
+                        <div class="meta-group">
+                            <div class="meta-item">
+                                <span class="meta-label">⏱️ Duração:</span>
+                                <span class="meta-val">Aproximadamente 3 meses</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">🌐 Idioma:</span>
+                                <span class="meta-val">Inglês / Português</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">📜 Certificado:</span>
+                                <span class="meta-val" style="color: #10b981;">Grátis via Auxílio Coursera</span>
+                            </div>
+                        </div>
+                        <a href="https://coursera.org" target="_blank" class="access-btn">Acessar Curso Gratuito ↗</a>
+                    </div>
+                </div>
+
+                <div class="course-card">
+                    <div>
+                        <div class="platform">YALE UNIVERSITY (COURSERA)</div>
+                        <div class="title">Financial Markets</div>
+                        <div class="desc">Visão geral das ideias, métodos e instituições que permitem à sociedade humana gerenciar riscos e promover empreendimentos.</div>
+                    </div>
+                    <div>
+                        <div class="meta-group">
+                            <div class="meta-item">
+                                <span class="meta-label">⏱️ Duração:</span>
+                                <span class="meta-val">33 horas</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">🌐 Idioma:</span>
+                                <span class="meta-val">Inglês (Legendas PT-BR)</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">📜 Certificado:</span>
+                                <span class="meta-val" style="color: #10b981;">Grátis via Auxílio Financeiro</span>
+                            </div>
+                        </div>
+                        <a href="https://coursera.org" target="_blank" class="access-btn">Acessar Curso Gratuito ↗</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESIGN -->
+            <div class="course-category" data-category="design">
+                <div class="course-card">
+                    <div>
+                        <div class="platform">GOOGLE (COURSERA)</div>
+                        <div class="title">Google UX Design Professional Certificate</div>
+                        <div class="desc">Fundamentos de pesquisa de usuário, wireframes, protótipos de alta fidelidade e testes de usabilidade no Figma.</div>
+                    </div>
+                    <div>
+                        <div class="meta-group">
+                            <div class="meta-item">
+                                <span class="meta-label">⏱️ Duração:</span>
+                                <span class="meta-val">Aproximadamente 6 meses</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">🌐 Idioma:</span>
+                                <span class="meta-val">Inglês (Legendas PT-BR)</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">📜 Certificado:</span>
+                                <span class="meta-val" style="color: #10b981;">Grátis via Auxílio Coursera</span>
+                            </div>
+                        </div>
+                        <a href="https://coursera.org" target="_blank" class="access-btn">Acessar Curso Gratuito ↗</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function mostrarCategoria(categoria, botao) {
+            // Remove classe active de todos os botões
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            // Adiciona classe active ao botão clicado
+            botao.classList.add('active');
+
+            // Esconde todas as categorias
+            document.querySelectorAll('.course-category').forEach(cat => cat.classList.remove('active'));
+            
+            // Mostra a categoria selecionada
+            document.querySelector(`[data-category="${categoria}"]`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
